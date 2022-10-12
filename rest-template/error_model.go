@@ -1,4 +1,4 @@
-package handler
+package rest_validation
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type ErrorModelResponse struct {
+type ErrorStructResponse struct {
 	Details       []detail `json:"details"`
 	Path          string   `json:"path"`
 	TimeStamp     string   `json:"time_stamp"`
@@ -28,14 +28,14 @@ type metaData struct {
 	Value interface{} `json:"value"`
 }
 
-func (errorModelResponse *ErrorModelResponse) createResponse(responseWrite http.ResponseWriter, request *http.Request) ErrorModelResponse {
+func (errorModelResponse *ErrorStructResponse) createResponse(responseWrite http.ResponseWriter, request *http.Request) ErrorStructResponse {
 	if len(errorModelResponse.TimeStamp) == 0 {
 		errorModelResponse.TimeStamp = "2006-01-02T15:04:05.000000000"
 	}
 	responseWrite.Header().Set("content-type", "application/json")
 	uuid, _ := exec.Command("uuidgen").Output()
 	responseWrite.Header().Set("Trace-UUID", string(uuid))
-	return ErrorModelResponse{
+	return ErrorStructResponse{
 		Details:       errorModelResponse.Details,
 		Path:          request.RequestURI,
 		TimeStamp:     time.Now().UTC().Format(errorModelResponse.TimeStamp),
@@ -43,13 +43,13 @@ func (errorModelResponse *ErrorModelResponse) createResponse(responseWrite http.
 	}
 }
 
-func (errorModelResponse *ErrorModelResponse) generate(httpCode int) {
+func (errorModelResponse *ErrorStructResponse) generate(httpCode int) {
 	errorModelResponse.ResponseWrite.WriteHeader(httpCode)
 	json, _ := json.Marshal(&errorModelResponse)
 	errorModelResponse.ResponseWrite.Write(json)
 }
 
-func (errorModelResponse *ErrorModelResponse) Exception(responseWrite http.ResponseWriter, request *http.Request, httpCode int, detailsErrors error) {
+func (errorModelResponse *ErrorStructResponse) Exception(responseWrite http.ResponseWriter, request *http.Request, httpCode int, detailsErrors error) {
 
 	if detailsErrors != nil {
 		for _, err := range detailsErrors.(validator.ValidationErrors) {
