@@ -1,12 +1,11 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"rest-validation/handler"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"log"
+	"net/http"
+	"rest_validation/response/"
 )
 
 func main() {
@@ -16,7 +15,7 @@ func main() {
 }
 
 func defaultErrorHandler(response http.ResponseWriter, request *http.Request) {
-	handler := handler.ErrorModelResponse{TimeStamp: "2006-02-01"}
+	handler := ErrorStructResponse{TimeStamp: "2006-02-01"}
 	handler.Exception(response, request, http.StatusConflict, nil)
 }
 
@@ -39,6 +38,6 @@ func defaultValidation(response http.ResponseWriter, request *http.Request) {
 	validate = validator.New()
 	err := validate.Struct(address)
 
-	handler := handler.ErrorModelResponse{}
+	handler := ErrorStructResponse{}
 	handler.Exception(response, request, http.StatusOK, err)
 }
