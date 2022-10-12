@@ -1,4 +1,4 @@
-package rest_validation
+package resttemplate
 
 import (
 	"encoding/json"
