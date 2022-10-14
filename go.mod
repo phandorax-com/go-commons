@@ -1,4 +1,4 @@
-module github.com/phandorax-com/go-commons/rest-template
+module github.com/phandorax-com/go-commons
 
 go 1.19
 
