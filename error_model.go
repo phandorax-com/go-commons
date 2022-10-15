@@ -3,7 +3,6 @@ package resttemplate
 import (
 	"encoding/json"
 	"net/http"
-	"os/exec"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -13,7 +12,7 @@ type ErrorStructResponse struct {
 	Details       []detail `json:"details"`
 	Path          string   `json:"path"`
 	TimeStamp     string   `json:"time_stamp"`
-	ResponseWrite http.ResponseWriter
+	responseWrite http.ResponseWriter
 }
 
 type detail struct {
@@ -33,20 +32,18 @@ func (errorModelResponse *ErrorStructResponse) createResponse(responseWrite http
 		errorModelResponse.TimeStamp = "2006-01-02T15:04:05.000000000"
 	}
 	responseWrite.Header().Set("content-type", "application/json")
-	uuid, _ := exec.Command("uuidgen").Output()
-	responseWrite.Header().Set("Trace-UUID", string(uuid))
 	return ErrorStructResponse{
 		Details:       errorModelResponse.Details,
 		Path:          request.RequestURI,
 		TimeStamp:     time.Now().UTC().Format(errorModelResponse.TimeStamp),
-		ResponseWrite: responseWrite,
+		responseWrite: responseWrite,
 	}
 }
 
 func (errorModelResponse *ErrorStructResponse) generate(httpCode int) {
-	errorModelResponse.ResponseWrite.WriteHeader(httpCode)
+	errorModelResponse.responseWrite.WriteHeader(httpCode)
 	json, _ := json.Marshal(&errorModelResponse)
-	errorModelResponse.ResponseWrite.Write(json)
+	errorModelResponse.responseWrite.Write(json)
 }
 
 func (errorModelResponse *ErrorStructResponse) Exception(responseWrite http.ResponseWriter, request *http.Request, httpCode int, detailsErrors error) {
