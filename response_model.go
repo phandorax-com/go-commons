@@ -16,6 +16,7 @@ func (modelResponse *StructResponse) createResponse(responseWrite http.ResponseW
 	}
 }
 
+
 func (modelResponse *StructResponse) generate(httpCode int, value interface{}) {
 	modelResponse.responseWrite.WriteHeader(httpCode)
 	json.NewEncoder(modelResponse.responseWrite).Encode(value)
