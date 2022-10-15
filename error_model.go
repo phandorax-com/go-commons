@@ -48,6 +48,8 @@ func (errorModelResponse *ErrorStructResponse) generate(httpCode int) {
 
 func (errorModelResponse *ErrorStructResponse) Exception(responseWrite http.ResponseWriter, request *http.Request, httpCode int, detailsErrors error) {
 
+	errorModelResponse.Details = []detail{}
+
 	if detailsErrors != nil {
 		for _, err := range detailsErrors.(validator.ValidationErrors) {
 			metaData := metaData{
@@ -62,8 +64,6 @@ func (errorModelResponse *ErrorStructResponse) Exception(responseWrite http.Resp
 			}
 			errorModelResponse.Details = append(errorModelResponse.Details, detailError)
 		}
-	} else {
-		errorModelResponse.Details = []detail{}
 	}
 
 	errorModel := errorModelResponse.createResponse(responseWrite, request)
