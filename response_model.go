@@ -16,13 +16,12 @@ func (modelResponse *StructResponse) createResponse(responseWrite http.ResponseW
 	}
 }
 
-func (modelResponse *StructResponse) generate(httpCode int) {
+func (modelResponse *StructResponse) generate(httpCode int, value interface{}) {
 	modelResponse.responseWrite.WriteHeader(httpCode)
-	json, _ := json.Marshal(&modelResponse)
-	modelResponse.responseWrite.Write(json)
+	json.NewEncoder(modelResponse.responseWrite).Encode(value)
 }
 
-func (modelResponse *StructResponse) RestResponse(responseWrite http.ResponseWriter, httpCode int) {
+func (modelResponse *StructResponse) RestResponse(responseWrite http.ResponseWriter, value interface{}, httpCode int) {
 	response := modelResponse.createResponse(responseWrite)
-	response.generate(httpCode)
+	response.generate(httpCode, value)
 }
