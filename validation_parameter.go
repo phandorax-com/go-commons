@@ -1,4 +1,4 @@
-package handlers
+package resttemplate
 
 import (
 	"github.com/go-playground/validator/v10"
