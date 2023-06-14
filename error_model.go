@@ -1,4 +1,4 @@
-package handlers
+package resttemplate
 
 import (
 	"encoding/json"
