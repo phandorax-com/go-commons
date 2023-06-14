@@ -28,6 +28,11 @@ type metaData struct {
 	Value interface{} `json:"value"`
 }
 
+func NewErrorResponse(response http.ResponseWriter) *ErrorStructResponse {
+	return &ErrorStructResponse{
+		responseWrite: response,
+	}
+}
 func (errorModelResponse *ErrorStructResponse) createResponse(responseWrite http.ResponseWriter, request *http.Request, code string) ErrorStructResponse {
 
 	responseWrite.Header().Set("content-type", "application/json")

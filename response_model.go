@@ -5,23 +5,23 @@ import (
 	"net/http"
 )
 
-type StructResponse struct {
+type structResponse struct {
 	responseWrite http.ResponseWriter
 }
 
-func (modelResponse *StructResponse) createResponse(responseWrite http.ResponseWriter) StructResponse {
+func (modelResponse *structResponse) createResponse(responseWrite http.ResponseWriter) structResponse {
 	responseWrite.Header().Set("content-type", "application/json")
-	return StructResponse{
+	return structResponse{
 		responseWrite: responseWrite,
 	}
 }
 
-func (modelResponse *StructResponse) generate(httpCode int, value interface{}) {
+func (modelResponse *structResponse) generate(httpCode int, value interface{}) {
 	modelResponse.responseWrite.WriteHeader(httpCode)
 	json.NewEncoder(modelResponse.responseWrite).Encode(value)
 }
 
-func (modelResponse *StructResponse) RestResponse(responseWrite http.ResponseWriter, value interface{}, httpCode int) {
+func (modelResponse *structResponse) RestResponse(responseWrite http.ResponseWriter, value interface{}, httpCode int) {
 	response := modelResponse.createResponse(responseWrite)
 	response.generate(httpCode, value)
 }
