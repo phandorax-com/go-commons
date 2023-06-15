@@ -33,6 +33,7 @@ func NewErrorResponse(response http.ResponseWriter) *ErrorStructResponse {
 		responseWrite: response,
 	}
 }
+
 func (errorModelResponse *ErrorStructResponse) createResponse(responseWrite http.ResponseWriter, request *http.Request, code string) ErrorStructResponse {
 
 	responseWrite.Header().Set("content-type", "application/json")
@@ -78,4 +79,38 @@ func (errorModelResponse *ErrorStructResponse) Exception(responseWrite http.Resp
 
 	errorModel := errorModelResponse.createResponse(responseWrite, request, code)
 	errorModel.generate(httpCode)
+}
+
+func (errorModelResponse *ErrorStructResponse) BadRequestException(request *http.Request, code string, detailsErrors error) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusBadRequest, code, detailsErrors)
+}
+func (errorModelResponse *ErrorStructResponse) PaymentRequiredException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusPaymentRequired, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) ForbiddenException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusForbidden, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) NotFoundException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusNotFound, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) MethodNotAllowedException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusMethodNotAllowed, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) NotAcceptableException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusNotAcceptable, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) ConflictException(request *http.Request, code string, detailsErrors error) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusConflict, code, detailsErrors)
+}
+func (errorModelResponse *ErrorStructResponse) PreconditionFailedException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusPreconditionFailed, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) UnsuportedMediaTypeException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusUnsupportedMediaType, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) UnprocessableEntityException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusUnprocessableEntity, code, nil)
+}
+func (errorModelResponse *ErrorStructResponse) InternalServerErrorException(request *http.Request, code string) {
+	errorModelResponse.Exception(errorModelResponse.responseWrite, request, http.StatusInternalServerError, code, nil)
 }
